@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = getApplicationContext();
         mHandler = new Handler();
-
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new TextAdapter();
         loadGUI();
         bindEvent();
-        init();
     }
 
     @Override
@@ -62,44 +62,11 @@ public class MainActivity extends AppCompatActivity {
         if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
-    }
 
-    private void loadGUI() {
-        setContentView(R.layout.activity_main);
-
-        mRecyclerView = (CenterDetectionRecyclerView) findViewById(R.id.my_recycler_view);
-
-        mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new TextAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
-            @Override
-            public void onCenterViewRecycled(RecyclerView.ViewHolder holder) {
-
-            }
-
-            @Override
-            public void onViewRecycled(RecyclerView.ViewHolder holder) {
-                TextAdapter.ClipViewHolder currentHolder = (TextAdapter.ClipViewHolder) holder;
-                currentHolder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
-                currentHolder.mTextView.setText("I AM NOT");
-            }
-        });
-    }
-
-    private void bindEvent() {
-        mRecyclerView.setOnCenterItemChangeListener(mCenterListener);
-    }
-
-    private void init() {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                TextAdapter.ClipViewHolder currentHolder = (TextAdapter.ClipViewHolder) mRecyclerView.getCenterViewHolder();
+                TextAdapter.TextViewHolder currentHolder = (TextAdapter.TextViewHolder) mRecyclerView.getCenterViewHolder();
 
                 if(currentHolder != null) {
                     currentHolder.mLayout.setBackgroundColor(Color.BLACK);
@@ -109,13 +76,39 @@ public class MainActivity extends AppCompatActivity {
         }, 1000);
     }
 
-    private CenterDetectionRecyclerView.OnCenterItemChangeListener mCenterListener = new CenterDetectionRecyclerView.OnCenterItemChangeListener() {
+    private void loadGUI() {
+        setContentView(R.layout.activity_main);
+
+        mRecyclerView = (CenterDetectionRecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void bindEvent() {
+        mRecyclerView.setCenterDetectionRecyclerListener(mRecyclerListener);
+    }
+
+    private CenterDetectionRecyclerView.CenterDetectionRecyclerListener mRecyclerListener = new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
 
         @Override
-        public void onItemChange(View child, RecyclerView.ViewHolder childHolder) {
-            TextAdapter.ClipViewHolder holder = (TextAdapter.ClipViewHolder) childHolder;
+        public void onCenterViewRecycled(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            TextAdapter.TextViewHolder holder = (TextAdapter.TextViewHolder) viewHolder;
+            holder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
+            holder.mTextView.setText("I AM NOT");
+        }
+
+        @Override
+        public void onCenterItemChange(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder oldViewHolder) {
+            TextAdapter.TextViewHolder holder = (TextAdapter.TextViewHolder) viewHolder;
             holder.mLayout.setBackgroundColor(Color.BLACK);
             holder.mTextView.setText("I AM CENTER");
+
+            if(oldViewHolder != null) {
+                TextAdapter.TextViewHolder oldHolder = (TextAdapter.TextViewHolder) oldViewHolder;
+                oldHolder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
+                oldHolder.mTextView.setText("I AM NOT");
+            }
         }
     };
 }

@@ -1,14 +1,76 @@
 # Android-CenterDetectionRecyclerView
 Detecte child view on center
 
+![](./example.gif)
+
+## Update
+### 1.2.0
+integrated Listener
+
 ## Example
 
 add build.gradle<br />
 ``` groovy
-compile 'com.crust87:center-detection-recyclerview:1.1.0'
+compile 'com.crust87:center-detection-recyclerview:1.2.0'
 ```
 
-see sample code
+append your layout xml
+```xml
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.crust87.centerdetectionrecyclerview.widget.CenterDetectionRecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>
+
+```
+
+load layout and initialize
+```java
+mLayoutManager = new LinearLayoutManager(this);
+mAdapter = new TextAdapter();
+mRecyclerView = (CenterDetectionRecyclerView) findViewById(R.id.my_recycler_view);
+mRecyclerView.setHasFixedSize(true);
+mRecyclerView.setLayoutManager(mLayoutManager);
+mRecyclerView.setAdapter(mAdapter);
+```
+
+and bind event
+```java
+mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
+    @Override
+    public void onCenterViewRecycled(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        // TODO something
+    }
+
+    @Override
+    public void onCenterItemChange(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder oldViewHolder) {
+        // TODO something
+    }
+});
+```
+
+see sample code to detail
+
+## Summary
+### Public Constructors
+| |
+|:---|
+| CenterDetectionRecyclerView(Context context) |
+| CenterDetectionRecyclerView(Context context, AttributeSet attrs) |
+| CenterDetectionRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) |
+
+### Public Methods
+| | |
+|:---|:---|
+| ViewHolder | getCenterViewHolder()(Uri imageUri)<br />Get ViewHolder in center item |
+| void | setCenterDetectionRecyclerListener(CenterDetectionRecyclerListener listener)<br />Set listener of CenterDetectionRecyclerView |
 
 
 ## License

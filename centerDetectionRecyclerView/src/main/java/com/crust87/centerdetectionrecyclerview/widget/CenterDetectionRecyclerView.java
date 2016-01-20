@@ -32,9 +32,9 @@ import android.view.View;
  */
 public class CenterDetectionRecyclerView extends RecyclerView {
 
-    private OnCenterItemChangeListener mOnCenterItemChangeListener;
     private CenterDetectionRecyclerListener mCenterDetectionRecyclerListener;
-    private ViewHolder postHolder;
+    private RecyclerListener mRecyclerListener;
+    private ViewHolder workingHolder;
 
     public CenterDetectionRecyclerView(Context context) {
         super(context);
@@ -55,19 +55,19 @@ public class CenterDetectionRecyclerView extends RecyclerView {
     }
 
     private void initView() {
-        addOnScrollListener(mListViewScrollListener);
+        super.addOnScrollListener(mListViewScrollListener);
 
         super.setRecyclerListener(new RecyclerListener() {
             @Override
             public void onViewRecycled(ViewHolder holder) {
-                if (mCenterDetectionRecyclerListener != null) {
-                    mCenterDetectionRecyclerListener.onViewRecycled(holder);
+                if (mRecyclerListener != null) {
+                    mRecyclerListener.onViewRecycled(holder);
                 }
 
-                if (postHolder == holder) {
-                    postHolder = null;
+                if (workingHolder == holder) {
+                    workingHolder = null;
                     if (mCenterDetectionRecyclerListener != null) {
-                        mCenterDetectionRecyclerListener.onCenterViewRecycled(holder);
+                        mCenterDetectionRecyclerListener.onCenterViewRecycled(CenterDetectionRecyclerView.this, holder);
                     }
                 }
             }
@@ -84,21 +84,21 @@ public class CenterDetectionRecyclerView extends RecyclerView {
 
             if (center > top && center < bottom) {
                 ViewHolder currentHolder = getChildViewHolder(currentView);
+                workingHolder = currentHolder;
 
-                postHolder = currentHolder;
-
-                return postHolder;
+                return workingHolder;
             }
         }
 
-        return null;
+        workingHolder = null;
+        return workingHolder;
     }
 
     private RecyclerView.OnScrollListener mListViewScrollListener = new RecyclerView.OnScrollListener() {
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            if (mOnCenterItemChangeListener == null) {
+            if (mCenterDetectionRecyclerListener == null) {
                 return;
             }
 
@@ -113,10 +113,10 @@ public class CenterDetectionRecyclerView extends RecyclerView {
                     if (center > top && center < bottom) {
                         ViewHolder currentHolder = getChildViewHolder(currentView);
 
-                        if (postHolder != currentHolder) {
-                            postHolder = currentHolder;
+                        if (workingHolder != currentHolder) {
+                            mCenterDetectionRecyclerListener.onCenterItemChange(CenterDetectionRecyclerView.this, currentHolder, workingHolder);
+                            workingHolder = currentHolder;
 
-                            mOnCenterItemChangeListener.onItemChange(currentView, currentHolder);
                             return;
                         }
                     }
@@ -125,19 +125,17 @@ public class CenterDetectionRecyclerView extends RecyclerView {
         }
     };
 
+    @Override
+    public void setRecyclerListener(RecyclerListener listener) {
+        mRecyclerListener = listener;
+    }
+
     public void setCenterDetectionRecyclerListener(CenterDetectionRecyclerListener listener) {
         mCenterDetectionRecyclerListener = listener;
     }
 
-    public void setOnCenterItemChangeListener(OnCenterItemChangeListener onCenterItemChangeListener) {
-        mOnCenterItemChangeListener = onCenterItemChangeListener;
-    }
-
-    public interface OnCenterItemChangeListener {
-        void onItemChange(View child, RecyclerView.ViewHolder holder);
-    }
-
-    public interface CenterDetectionRecyclerListener extends RecyclerListener {
-        void onCenterViewRecycled(ViewHolder holder);
+    public interface CenterDetectionRecyclerListener {
+        void onCenterViewRecycled(RecyclerView recyclerView, ViewHolder viewHolder);
+        void onCenterItemChange(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder oldViewHolder);
     }
 }

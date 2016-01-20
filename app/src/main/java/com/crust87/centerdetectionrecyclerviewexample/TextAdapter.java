@@ -33,15 +33,15 @@ import android.widget.TextView;
 /**
  * Created by mabi on 2016. 1. 15..
  */
-public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ClipViewHolder> {
+public class TextAdapter extends RecyclerView.Adapter<TextAdapter.TextViewHolder> {
 
     public static int BACKGROUND_COLOR = Color.parseColor("#7e7e7e");
 
-    public static class ClipViewHolder extends RecyclerView.ViewHolder {
+    public static class TextViewHolder extends RecyclerView.ViewHolder {
         public FrameLayout mLayout;
         public TextView mTextView;
 
-        public ClipViewHolder(View view, FrameLayout layout, TextView textView) {
+        public TextViewHolder(View view, FrameLayout layout, TextView textView) {
             super(view);
             mLayout = layout;
             mTextView = textView;
@@ -49,17 +49,17 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ClipViewHolder
     }
 
     @Override
-    public TextAdapter.ClipViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TextAdapter.TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
 
         FrameLayout layout = (FrameLayout) view.findViewById(R.id.layout);
         TextView textView = (TextView) view.findViewById(R.id.text);
 
-        return new ClipViewHolder(view, layout, textView);
+        return new TextViewHolder(view, layout, textView);
     }
 
     @Override
-    public void onBindViewHolder(ClipViewHolder holder, int position) {
+    public void onBindViewHolder(TextViewHolder holder, int position) {
         holder.mLayout.setBackgroundColor(BACKGROUND_COLOR);
         holder.mTextView.setText("I AM NOT");
     }
