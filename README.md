@@ -69,7 +69,7 @@ see sample code to detail
 ### Public Methods
 | | |
 |:---|:---|
-| ViewHolder | getCenterViewHolder()(Uri imageUri)<br />Get ViewHolder in center item |
+| ViewHolder | getCenterViewHolder()<br />Get ViewHolder in center item |
 | void | setCenterDetectionRecyclerListener(CenterDetectionRecyclerListener listener)<br />Set listener of CenterDetectionRecyclerView |
 
 
