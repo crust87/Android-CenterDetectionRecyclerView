@@ -22,6 +22,7 @@
 package com.crust87.centerdetectionrecyclerviewexample;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import com.crust87.centerdetectionrecyclerview.widget.CenterDetectionRecyclerView;
 
 public class MainActivity extends AppCompatActivity {
+
     protected Context mContext;
     protected Handler mHandler;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         loadGUI();
         bindEvent();
+        init();
     }
 
     @Override
@@ -73,26 +76,46 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new TextAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
+            @Override
+            public void onCenterViewRecycled(RecyclerView.ViewHolder holder) {
+
+            }
+
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+                TextAdapter.ClipViewHolder currentHolder = (TextAdapter.ClipViewHolder) holder;
+                currentHolder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
+                currentHolder.mTextView.setText("I AM NOT");
+            }
+        });
     }
 
     private void bindEvent() {
         mRecyclerView.setOnCenterItemChangeListener(mCenterListener);
     }
 
-    private CenterDetectionRecyclerView.OnCenterItemChangeListener mCenterListener = new CenterDetectionRecyclerView.OnCenterItemChangeListener() {
+    private void init() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TextAdapter.ClipViewHolder currentHolder = (TextAdapter.ClipViewHolder) mRecyclerView.getCenterViewHolder();
 
-        TextView lastView;
+                if(currentHolder != null) {
+                    currentHolder.mLayout.setBackgroundColor(Color.BLACK);
+                    currentHolder.mTextView.setText("I AM CENTER");
+                }
+            }
+        }, 1000);
+    }
+
+    private CenterDetectionRecyclerView.OnCenterItemChangeListener mCenterListener = new CenterDetectionRecyclerView.OnCenterItemChangeListener() {
 
         @Override
         public void onItemChange(View child, RecyclerView.ViewHolder childHolder) {
-            if(lastView != null) {
-                lastView.setText("I AM NOT");
-            }
-
             TextAdapter.ClipViewHolder holder = (TextAdapter.ClipViewHolder) childHolder;
+            holder.mLayout.setBackgroundColor(Color.BLACK);
             holder.mTextView.setText("I AM CENTER");
-
-            lastView = holder.mTextView;
         }
     };
 }

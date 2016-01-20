@@ -22,10 +22,12 @@
 package com.crust87.centerdetectionrecyclerviewexample;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 /**
@@ -33,13 +35,15 @@ import android.widget.TextView;
  */
 public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ClipViewHolder> {
 
-    private Context mContext;
+    public static int BACKGROUND_COLOR = Color.parseColor("#7e7e7e");
 
     public static class ClipViewHolder extends RecyclerView.ViewHolder {
+        public FrameLayout mLayout;
         public TextView mTextView;
 
-        public ClipViewHolder(View view, TextView textView) {
+        public ClipViewHolder(View view, FrameLayout layout, TextView textView) {
             super(view);
+            mLayout = layout;
             mTextView = textView;
         }
     }
@@ -48,13 +52,15 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ClipViewHolder
     public TextAdapter.ClipViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
 
+        FrameLayout layout = (FrameLayout) view.findViewById(R.id.layout);
         TextView textView = (TextView) view.findViewById(R.id.text);
 
-        return new ClipViewHolder(view, textView);
+        return new ClipViewHolder(view, layout, textView);
     }
 
     @Override
     public void onBindViewHolder(ClipViewHolder holder, int position) {
+        holder.mLayout.setBackgroundColor(BACKGROUND_COLOR);
         holder.mTextView.setText("I AM NOT");
     }
 
