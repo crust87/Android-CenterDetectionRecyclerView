@@ -5,7 +5,7 @@ Detecte child view on center
 
 add build.gradle<br />
 ``` groovy
-compile 'com.crust87:center-detection-recyclerview:1.0.0'
+compile 'com.crust87:center-detection-recyclerview:1.1.0'
 ```
 
 see sample code
