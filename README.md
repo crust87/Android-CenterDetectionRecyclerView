@@ -43,14 +43,14 @@ mRecyclerView.setAdapter(mAdapter);
 
 and bind event
 ```java
-mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
+mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerListener() {
     @Override
-    public void onCenterViewRecycled(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public void onCenterViewRecycled(RecyclerView recyclerView, ViewHolder viewHolder) {
         // TODO something
     }
 
     @Override
-    public void onCenterItemChange(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder oldViewHolder) {
+    public void onCenterItemChange(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder oldViewHolder) {
         // TODO something
     }
 });
