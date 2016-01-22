@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -92,23 +93,17 @@ public class MainActivity extends AppCompatActivity {
     private CenterDetectionRecyclerView.CenterDetectionRecyclerListener mRecyclerListener = new CenterDetectionRecyclerView.CenterDetectionRecyclerListener() {
 
         @Override
-        public void onCenterViewRecycled(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        public void onCenterItemOut(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             TextAdapter.TextViewHolder holder = (TextAdapter.TextViewHolder) viewHolder;
             holder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
             holder.mTextView.setText("I AM NOT");
         }
 
         @Override
-        public void onCenterItemChange(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder oldViewHolder) {
+        public void onCenterItemIn(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             TextAdapter.TextViewHolder holder = (TextAdapter.TextViewHolder) viewHolder;
             holder.mLayout.setBackgroundColor(Color.BLACK);
             holder.mTextView.setText("I AM CENTER");
-
-            if(oldViewHolder != null) {
-                TextAdapter.TextViewHolder oldHolder = (TextAdapter.TextViewHolder) oldViewHolder;
-                oldHolder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
-                oldHolder.mTextView.setText("I AM NOT");
-            }
         }
     };
 }

@@ -4,6 +4,9 @@ Detecte child view on center
 ![](./example.gif)
 
 ## Update
+### 1.3.0
+update CenterDetectionRecyclerListener
+
 ### 1.2.0
 integrated Listener
 
@@ -11,7 +14,7 @@ integrated Listener
 
 add build.gradle<br />
 ``` groovy
-compile 'com.crust87:center-detection-recyclerview:1.2.0'
+compile 'com.crust87:center-detection-recyclerview:1.3.0'
 ```
 
 append your layout xml
@@ -45,12 +48,12 @@ and bind event
 ```java
 mRecyclerView.setCenterDetectionRecyclerListener(new CenterDetectionRecyclerListener() {
     @Override
-    public void onCenterViewRecycled(RecyclerView recyclerView, ViewHolder viewHolder) {
+    public void onCenterItemOut(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         // TODO something
     }
 
     @Override
-    public void onCenterItemChange(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder oldViewHolder) {
+    public void onCenterItemIn(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         // TODO something
     }
 });

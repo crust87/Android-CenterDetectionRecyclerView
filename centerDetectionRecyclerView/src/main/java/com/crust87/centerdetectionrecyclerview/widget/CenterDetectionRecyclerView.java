@@ -22,6 +22,7 @@
 package com.crust87.centerdetectionrecyclerview.widget;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -64,10 +65,14 @@ public class CenterDetectionRecyclerView extends RecyclerView {
                     mRecyclerListener.onViewRecycled(holder);
                 }
 
+                if(holder == null) {
+                    return;
+                }
+
                 if (workingHolder == holder) {
                     workingHolder = null;
                     if (mCenterDetectionRecyclerListener != null) {
-                        mCenterDetectionRecyclerListener.onCenterViewRecycled(CenterDetectionRecyclerView.this, holder);
+                        mCenterDetectionRecyclerListener.onCenterItemOut(CenterDetectionRecyclerView.this, holder);
                     }
                 }
             }
@@ -113,8 +118,16 @@ public class CenterDetectionRecyclerView extends RecyclerView {
                     if (center > top && center < bottom) {
                         ViewHolder currentHolder = getChildViewHolder(currentView);
 
+                        if(currentHolder == null) {
+                            return;
+                        }
+
                         if (workingHolder != currentHolder) {
-                            mCenterDetectionRecyclerListener.onCenterItemChange(CenterDetectionRecyclerView.this, currentHolder, workingHolder);
+                            if(workingHolder != null) {
+                                mCenterDetectionRecyclerListener.onCenterItemOut(CenterDetectionRecyclerView.this, workingHolder);
+                            }
+
+                            mCenterDetectionRecyclerListener.onCenterItemIn(CenterDetectionRecyclerView.this, currentHolder);
                             workingHolder = currentHolder;
 
                             return;
@@ -135,7 +148,7 @@ public class CenterDetectionRecyclerView extends RecyclerView {
     }
 
     public interface CenterDetectionRecyclerListener {
-        void onCenterViewRecycled(RecyclerView recyclerView, ViewHolder viewHolder);
-        void onCenterItemChange(RecyclerView recyclerView, ViewHolder viewHolder, ViewHolder oldViewHolder);
+        void onCenterItemIn(RecyclerView recyclerView, @NonNull ViewHolder viewHolder);
+        void onCenterItemOut(RecyclerView recyclerView, @NonNull ViewHolder viewHolder);
     }
 }
