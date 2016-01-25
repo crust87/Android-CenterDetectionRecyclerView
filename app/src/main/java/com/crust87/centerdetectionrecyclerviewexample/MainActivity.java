@@ -29,12 +29,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.crust87.centerdetectionrecyclerview.widget.CenterDetectionRecyclerView;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static int BACKGROUND_COLOR = Color.parseColor("#7e7e7e");
 
     protected Context mContext;
     protected Handler mHandler;
@@ -95,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onCenterItemOut(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             TextAdapter.TextViewHolder holder = (TextAdapter.TextViewHolder) viewHolder;
-            holder.mLayout.setBackgroundColor(TextAdapter.BACKGROUND_COLOR);
+            holder.mLayout.setBackgroundColor(BACKGROUND_COLOR);
             holder.mTextView.setText("I AM NOT");
         }
 
@@ -106,4 +111,39 @@ public class MainActivity extends AppCompatActivity {
             holder.mTextView.setText("I AM CENTER");
         }
     };
+
+    public class TextAdapter extends RecyclerView.Adapter<TextAdapter.TextViewHolder> {
+
+        public class TextViewHolder extends RecyclerView.ViewHolder {
+            public FrameLayout mLayout;
+            public TextView mTextView;
+
+            public TextViewHolder(View view, FrameLayout layout, TextView textView) {
+                super(view);
+                mLayout = layout;
+                mTextView = textView;
+            }
+        }
+
+        @Override
+        public TextAdapter.TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, parent, false);
+
+            FrameLayout layout = (FrameLayout) view.findViewById(R.id.layout);
+            TextView textView = (TextView) view.findViewById(R.id.text);
+
+            return new TextViewHolder(view, layout, textView);
+        }
+
+        @Override
+        public void onBindViewHolder(TextViewHolder holder, int position) {
+            holder.mLayout.setBackgroundColor(BACKGROUND_COLOR);
+            holder.mTextView.setText("I AM NOT");
+        }
+
+        @Override
+        public int getItemCount() {
+            return 50;
+        }
+    }
 }
